@@ -1,6 +1,7 @@
 from aiohttp import web
 import json
 import asyncio
+import random
 from datetime import datetime
 
 async def handle_request(request):
@@ -37,6 +38,12 @@ async def handle_request(request):
         if body:
             print(f"Body: {body}")
         
+        # 处理完请求后随机sleep 10-30秒
+        sleep_time = random.randint(10, 30)
+        print(f"[INFO] Request processed, sleeping for {sleep_time} seconds...")
+        await asyncio.sleep(sleep_time)
+        print(f"[INFO] Sleep completed, sending response.")
+        
         return web.Response(
             text=response_content,
             status=200,
@@ -46,6 +53,13 @@ async def handle_request(request):
     except Exception as e:
         print(f"Error: {e}")
         error_response = f"{{\"error\": \"{str(e)}\", \"timestamp\": \"{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\"}}"
+        
+        # 错误处理后也随机sleep 10-30秒
+        sleep_time = random.randint(10, 30)
+        print(f"[INFO] Error handled, sleeping for {sleep_time} seconds...")
+        await asyncio.sleep(sleep_time)
+        print(f"[INFO] Sleep completed, sending error response.")
+        
         return web.Response(
             text=error_response,
             status=200,
